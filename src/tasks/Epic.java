@@ -11,12 +11,7 @@ public class Epic extends Task {
     }
 
     void addSubtask(Subtask subtask) {
-        if (subtasks.contains(subtask)) {
-            subtasks.remove(subtask);
-            subtasks.add(subtask);
-        } else {
-            subtasks.add(subtask);
-        }
+        subtasks.add(subtask);
         checkStatus();
     }
 
@@ -31,7 +26,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "tasks.Epic{" +
+        return "Epic{" +
                 "name='" + getName() + '\'' +
                 ", description.length=" + getDescription().length() +
                 ", id=" + getId() +

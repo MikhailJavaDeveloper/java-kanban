@@ -64,8 +64,8 @@ public class Main {
         System.out.println(tasksManager.getSubtasks());
         System.out.println();
 
-        tasksManager.deleteTaskById(8);
-        tasksManager.deleteEpicById(3);
+        tasksManager.deleteTaskById(7);
+        tasksManager.deleteEpicById(2);
 
         System.out.println("Списки эпиков, задач и подзадач после удаления одной из задач и одного из эпиков:");
         System.out.println(tasksManager.getEpics());

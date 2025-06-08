@@ -17,8 +17,12 @@ public class TasksManager {
     }
 
 
-    public HashMap<Integer, Task> getTasks() {
-        return tasks;
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task> tasksList = new ArrayList<>();
+        for (Task task : tasks.values()) {
+            tasksList.add(task);
+        }
+        return tasksList;
     }
 
     public void deleteTasks() {
@@ -30,11 +34,13 @@ public class TasksManager {
     }
 
     public void putTask(Task task) {
-        tasks.put(generateTaskId(), task);
+        task.setId(generateTaskId());
+        tasks.put(task.getId(), task);
     }
 
     public void renewTask(Task task) {
-        tasks.put(generateTaskId(), task);
+        task.setId(generateTaskId());
+        tasks.put(task.getId(), task);
     }
 
     public void deleteTaskById(int id) {
@@ -42,8 +48,12 @@ public class TasksManager {
     }
 
 
-    public HashMap<Integer, Subtask> getSubtasks() {
-        return subtasks;
+    public ArrayList<Subtask> getSubtasks() {
+        ArrayList<Subtask> subtasksList = new ArrayList<>();
+        for (Subtask subtask : subtasks.values()) {
+            subtasksList.add(subtask);
+        }
+        return subtasksList;
     }
 
     public void deleteSubtasks() {
@@ -58,11 +68,13 @@ public class TasksManager {
     }
 
     public void putSubtask(Subtask subtask) {
-        subtasks.put(generateTaskId(), subtask);
+        subtask.setId(generateTaskId());
+        subtasks.put(subtask.getId(), subtask);
     }
 
     public void renewSubtask(Subtask subtask) {
-        subtasks.put(generateTaskId(), subtask);
+        subtask.setId(generateTaskId());
+        subtasks.put(subtask.getId(), subtask);
     }
 
     public void deleteSubtaskById(int id) {
@@ -71,11 +83,16 @@ public class TasksManager {
     }
 
 
-    public HashMap<Integer, Epic> getEpics() {
-        return epics;
+    public ArrayList<Epic> getEpics() {
+        ArrayList<Epic> epicsList = new ArrayList<>();
+        for (Epic epic : epics.values()) {
+            epicsList.add(epic);
+        }
+        return epicsList;
     }
 
     public void deleteEpics() {
+        subtasks.clear();
         epics.clear();
     }
 
@@ -84,16 +101,18 @@ public class TasksManager {
     }
 
     public void putEpic(Epic epic) {
-        epics.put(generateTaskId(), epic);
+        epic.setId(generateTaskId());
+        epics.put(epic.getId(), epic);
     }
 
     public void renewEpic(Epic epic) {
-        epics.put(generateTaskId(), epic);
+        epic.setId(generateTaskId());
+        epics.put(epic.getId(), epic);
     }
 
     public void deleteEpicById(int id) {
         for (Subtask subtask : epics.get(id).getSubtasks()) {
-            epics.get(id).deleteSubtask(subtask);
+            subtasks.remove(subtask.getId());
         }
         epics.remove(id);
     }
@@ -104,6 +123,6 @@ public class TasksManager {
     }
 
     private int generateTaskId() {
-        return ++taskId;
+        return taskId++;
     }
 }
