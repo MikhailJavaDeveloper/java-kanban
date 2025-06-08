@@ -53,7 +53,7 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, status);
+        return Objects.hash(name, description);
     }
 
     @Override

@@ -11,7 +11,12 @@ public class Epic extends Task {
     }
 
     void addSubtask(Subtask subtask) {
-        subtasks.add(subtask);
+        if (subtasks.contains(subtask)) {
+            subtasks.remove(subtask);
+            subtasks.add(subtask);
+        } else {
+            subtasks.add(subtask);
+        }
         checkStatus();
     }
 
@@ -20,7 +25,22 @@ public class Epic extends Task {
         checkStatus();
     }
 
-    void checkStatus() {
+    ArrayList<Subtask> getSubtasks() {
+        return subtasks;
+    }
+
+    @Override
+    public String toString() {
+        return "tasks.Epic{" +
+                "name='" + getName() + '\'' +
+                ", description.length=" + getDescription().length() +
+                ", id=" + getId() +
+                ", status=" + getStatus() +
+                ", subtasks.size()=" + subtasks.size() +
+                '}';
+    }
+
+    private void checkStatus() {
         if (subtasks.isEmpty()) {
             this.setStatus(Statuses.NEW);
             return;
@@ -35,22 +55,5 @@ public class Epic extends Task {
         if (subtasks.size() == statusNewCount) this.setStatus(Statuses.NEW);
         else if (subtasks.size() == statusDoneCount) this.setStatus(Statuses.DONE);
         else this.setStatus(Statuses.IN_PROGRESS);
-    }
-
-    void printSubtasks() {
-        for (Subtask subtask : subtasks) {
-            System.out.println(subtask.getName());
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "tasks.Epic{" +
-                "name='" + getName() + '\'' +
-                ", description.length=" + getDescription().length() +
-                ", id=" + getId() +
-                ", status=" + getStatus() +
-                ", subtasks.size()=" + subtasks.size() +
-                '}';
     }
 }

@@ -30,9 +30,9 @@ public class Main {
         tasksManager.putSubtask(fillUpAtGasStation);
 
         System.out.println("Списки эпиков, задач и подзадач:");
-        tasksManager.printEpics();
-        tasksManager.printTasks();
-        tasksManager.printSubtasks();
+        System.out.println(tasksManager.getEpics());
+        System.out.println(tasksManager.getTasks());
+        System.out.println(tasksManager.getSubtasks());
         System.out.println();
 
         tasksManager.deleteTasks();
@@ -59,17 +59,17 @@ public class Main {
         tasksManager.renewSubtask(newFillUpAtGasStation);
 
         System.out.println("Списки эпиков, задач и подзадач после изменения статусов у задач и подзадач:");
-        tasksManager.printEpics();
-        tasksManager.printTasks();
-        tasksManager.printSubtasks();
+        System.out.println(tasksManager.getEpics());
+        System.out.println(tasksManager.getTasks());
+        System.out.println(tasksManager.getSubtasks());
         System.out.println();
 
-        tasksManager.deleteTaskById(newWashDishes.getId());
-        tasksManager.deleteEpicById(buyGroceries.getId());
+        tasksManager.deleteTaskById(8);
+        tasksManager.deleteEpicById(3);
 
         System.out.println("Списки эпиков, задач и подзадач после удаления одной из задач и одного из эпиков:");
-        tasksManager.printEpics();
-        tasksManager.printTasks();
-        tasksManager.printSubtasks();
+        System.out.println(tasksManager.getEpics());
+        System.out.println(tasksManager.getTasks());
+        System.out.println(tasksManager.getSubtasks());
     }
 }
