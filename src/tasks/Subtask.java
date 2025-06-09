@@ -1,7 +1,7 @@
 package tasks;
 
 public class Subtask extends Task {
-    private final Epic epic;
+    private Epic epic;
 
     public Subtask(String name, String description, Statuses status, Epic epic) {
         super(name, description, status);
@@ -11,6 +11,10 @@ public class Subtask extends Task {
 
     public Epic getEpic() {
         return epic;
+    }
+
+    void setEpic(Epic epic) {
+        this.epic = epic;
     }
 
     @Override

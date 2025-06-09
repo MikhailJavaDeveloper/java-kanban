@@ -38,9 +38,9 @@ public class TasksManager {
         tasks.put(task.getId(), task);
     }
 
-    public void renewTask(Task task) {
-        task.setId(generateTaskId());
-        tasks.put(task.getId(), task);
+    public void renewTask(Task oldTask, Task newTask) {
+        newTask.setId(oldTask.getId());
+        tasks.put(newTask.getId(), newTask);
     }
 
     public void deleteTaskById(int id) {
@@ -72,9 +72,10 @@ public class TasksManager {
         subtasks.put(subtask.getId(), subtask);
     }
 
-    public void renewSubtask(Subtask subtask) {
-        subtask.setId(generateTaskId());
-        subtasks.put(subtask.getId(), subtask);
+    public void renewSubtask(Subtask oldSubtask, Subtask newSubtask) {
+        newSubtask.setId(oldSubtask.getId());
+        newSubtask.getEpic().deleteSubtask(oldSubtask);
+        subtasks.put(newSubtask.getId(), newSubtask);
     }
 
     public void deleteSubtaskById(int id) {
@@ -105,9 +106,13 @@ public class TasksManager {
         epics.put(epic.getId(), epic);
     }
 
-    public void renewEpic(Epic epic) {
-        epic.setId(generateTaskId());
-        epics.put(epic.getId(), epic);
+    public void renewEpic(Epic oldEpic, Epic newEpic) {
+        newEpic.setId(oldEpic.getId());
+        newEpic.setSubtasks(oldEpic.getSubtasks());
+        for (Subtask subtask : newEpic.getSubtasks()) {
+            subtask.setEpic(newEpic);
+        }
+        epics.put(newEpic.getId(), newEpic);
     }
 
     public void deleteEpicById(int id) {

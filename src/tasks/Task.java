@@ -34,7 +34,7 @@ public class Task {
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 
@@ -44,14 +44,6 @@ public class Task {
 
     protected void setStatus(Statuses status) {
         this.status = status;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return id == task.id;
     }
 
     @Override

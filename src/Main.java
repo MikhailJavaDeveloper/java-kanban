@@ -11,7 +11,7 @@ public class Main {
             Statuses.IN_PROGRESS);
         Epic buyGroceries = new Epic("Купить продукты", "Купить продкты домой");
         Subtask writeList = new Subtask("Написать список", "Написать список продуктов," +
-            " которые нужно купить", Statuses.NEW, buyGroceries);
+            " которые нужно купить", Statuses.IN_PROGRESS, buyGroceries);
         Subtask goToGroceryStore = new Subtask("Пойти в магазин",
                 "Пойти в продуктовый магазин и купить там все продукты из списка", Statuses.NEW, buyGroceries);
         Epic refillCarGasTank = new Epic("Пополнить запасы бензина",
@@ -35,9 +35,6 @@ public class Main {
         System.out.println(tasksManager.getSubtasks());
         System.out.println();
 
-        tasksManager.deleteTasks();
-        tasksManager.deleteSubtasks();
-
         Task newWashDishes = new Task("Помыть посуду", "Нужно нанести мыло для посуды на губку, " +
             "брать посуду одну за другой, намыливать их губкой, " +
             "а затем смывать мыло и класть посуду на место", Statuses.IN_PROGRESS);
@@ -45,18 +42,18 @@ public class Main {
             "потом совмещать между собой детали которые подходят друг к другу и делают картинку цельной",
             Statuses.DONE);
         Subtask newWriteList = new Subtask("Написать список", "Написать список продуктов," +
-            " которые нужно купить", Statuses.IN_PROGRESS, buyGroceries);
+            " которые нужно купить", Statuses.DONE, buyGroceries);
         Subtask newGoToGroceryStore = new Subtask("Пойти в магазин",
-            "Пойти в продуктовый магазин и купить там все продукты из списка", Statuses.DONE, buyGroceries);
+            "Пойти в продуктовый магазин и купить там все продукты из списка", Statuses.IN_PROGRESS, buyGroceries);
         Subtask newFillUpAtGasStation = new Subtask("Заправиться на заправке",
             "Подъехать к колонке, выбрать нужный бензин и заправить бак необходимым количеством бензина",
             Statuses.DONE, refillCarGasTank);
 
-        tasksManager.renewTask(newWashDishes);
-        tasksManager.renewTask(newAssemblePuzzle);
-        tasksManager.renewSubtask(newWriteList);
-        tasksManager.renewSubtask(newGoToGroceryStore);
-        tasksManager.renewSubtask(newFillUpAtGasStation);
+        tasksManager.renewTask(washDishes, newWashDishes);
+        tasksManager.renewTask(assemblePuzzle, newAssemblePuzzle);
+        tasksManager.renewSubtask(writeList, newWriteList);
+        tasksManager.renewSubtask(goToGroceryStore, newGoToGroceryStore);
+        tasksManager.renewSubtask(fillUpAtGasStation, newFillUpAtGasStation);
 
         System.out.println("Списки эпиков, задач и подзадач после изменения статусов у задач и подзадач:");
         System.out.println(tasksManager.getEpics());
@@ -64,7 +61,7 @@ public class Main {
         System.out.println(tasksManager.getSubtasks());
         System.out.println();
 
-        tasksManager.deleteTaskById(7);
+        tasksManager.deleteTaskById(0);
         tasksManager.deleteEpicById(2);
 
         System.out.println("Списки эпиков, задач и подзадач после удаления одной из задач и одного из эпиков:");
