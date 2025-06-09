@@ -13,12 +13,12 @@ public class Main {
         Subtask writeList = new Subtask("Написать список", "Написать список продуктов," +
             " которые нужно купить", Statuses.IN_PROGRESS, buyGroceries);
         Subtask goToGroceryStore = new Subtask("Пойти в магазин",
-                "Пойти в продуктовый магазин и купить там все продукты из списка", Statuses.NEW, buyGroceries);
+            "Пойти в продуктовый магазин и купить там все продукты из списка", Statuses.NEW, buyGroceries);
         Epic refillCarGasTank = new Epic("Пополнить запасы бензина",
             "Пополнить запасы бензина в баке машины");
         Subtask fillUpAtGasStation = new Subtask("Заправиться на заправке",
             "Подъехать к колонке, выбрать нужный бензин и заправить бак необходимым количеством бензина",
-                Statuses.NEW, refillCarGasTank);
+            Statuses.NEW, refillCarGasTank);
 
         TasksManager tasksManager = new TasksManager();
         tasksManager.putTask(washDishes);
@@ -35,18 +35,13 @@ public class Main {
         System.out.println(tasksManager.getSubtasks());
         System.out.println();
 
-        Task newWashDishes = new Task("Помыть посуду", "Нужно нанести мыло для посуды на губку, " +
-            "брать посуду одну за другой, намыливать их губкой, " +
-            "а затем смывать мыло и класть посуду на место", Statuses.IN_PROGRESS);
-        Task newAssemblePuzzle = new Task("Собрать пазл", "Нужно разложить все пазлины, " +
-            "потом совмещать между собой детали которые подходят друг к другу и делают картинку цельной",
-            Statuses.DONE);
-        Subtask newWriteList = new Subtask("Написать список", "Написать список продуктов," +
-            " которые нужно купить", Statuses.DONE, buyGroceries);
-        Subtask newGoToGroceryStore = new Subtask("Пойти в магазин",
-            "Пойти в продуктовый магазин и купить там все продукты из списка", Statuses.IN_PROGRESS, buyGroceries);
-        Subtask newFillUpAtGasStation = new Subtask("Заправиться на заправке",
-            "Подъехать к колонке, выбрать нужный бензин и заправить бак необходимым количеством бензина",
+        Task newWashDishes = new Task(washDishes.getName(), washDishes.getDescription(), Statuses.IN_PROGRESS);
+        Task newAssemblePuzzle = new Task(assemblePuzzle.getName(), assemblePuzzle.getDescription(), Statuses.DONE);
+        Subtask newWriteList = new Subtask(writeList.getName(), writeList.getDescription(), Statuses.DONE,
+            buyGroceries);
+        Subtask newGoToGroceryStore = new Subtask(goToGroceryStore.getName(), goToGroceryStore.getDescription(),
+            Statuses.IN_PROGRESS, buyGroceries);
+        Subtask newFillUpAtGasStation = new Subtask(fillUpAtGasStation.getName(), fillUpAtGasStation.getDescription(),
             Statuses.DONE, refillCarGasTank);
 
         tasksManager.renewTask(washDishes, newWashDishes);
