@@ -10,12 +10,22 @@ public class Epic extends Task {
         this.subtasks = new ArrayList<>();
     }
 
+    public Epic(Epic oldEpic, String name, String description) {
+        super(name, description, Statuses.NEW);
+        this.setId(oldEpic.getId());
+        this.subtasks = oldEpic.getSubtasks();
+        for (Subtask subtask : subtasks) {
+            subtask.setEpic(this);
+        }
+        checkStatus();
+    }
+
     void addSubtask(Subtask subtask) {
         subtasks.add(subtask);
         checkStatus();
     }
 
-    void deleteSubtask(Subtask subtask) {
+    void removeSubtask(Subtask subtask) {
         subtasks.remove(subtask);
         checkStatus();
     }

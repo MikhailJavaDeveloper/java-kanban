@@ -35,20 +35,21 @@ public class Main {
         System.out.println(tasksManager.getSubtasks());
         System.out.println();
 
-        Task newWashDishes = new Task(washDishes.getName(), washDishes.getDescription(), Statuses.IN_PROGRESS);
-        Task newAssemblePuzzle = new Task(assemblePuzzle.getName(), assemblePuzzle.getDescription(), Statuses.DONE);
-        Subtask newWriteList = new Subtask(writeList.getName(), writeList.getDescription(), Statuses.DONE,
-            buyGroceries);
-        Subtask newGoToGroceryStore = new Subtask(goToGroceryStore.getName(), goToGroceryStore.getDescription(),
-            Statuses.IN_PROGRESS, buyGroceries);
-        Subtask newFillUpAtGasStation = new Subtask(fillUpAtGasStation.getName(), fillUpAtGasStation.getDescription(),
-            Statuses.DONE, refillCarGasTank);
+        Task newWashDishes = new Task(washDishes, washDishes.getName(), washDishes.getDescription(),
+            Statuses.IN_PROGRESS);
+        Task newAssemblePuzzle = new Task(assemblePuzzle, assemblePuzzle.getName(), assemblePuzzle.getDescription(),
+            Statuses.DONE);
+        Subtask newWriteList = new Subtask(writeList, writeList.getName(), writeList.getDescription(), Statuses.DONE);
+        Subtask newGoToGroceryStore = new Subtask(goToGroceryStore, goToGroceryStore.getName(),
+            goToGroceryStore.getDescription(), Statuses.IN_PROGRESS);
+        Subtask newFillUpAtGasStation = new Subtask(fillUpAtGasStation, fillUpAtGasStation.getName(),
+            fillUpAtGasStation.getDescription(), Statuses.DONE);
 
-        tasksManager.renewTask(washDishes, newWashDishes);
-        tasksManager.renewTask(assemblePuzzle, newAssemblePuzzle);
-        tasksManager.renewSubtask(writeList, newWriteList);
-        tasksManager.renewSubtask(goToGroceryStore, newGoToGroceryStore);
-        tasksManager.renewSubtask(fillUpAtGasStation, newFillUpAtGasStation);
+        tasksManager.renewTask(newWashDishes);
+        tasksManager.renewTask(newAssemblePuzzle);
+        tasksManager.renewSubtask(newWriteList);
+        tasksManager.renewSubtask(newGoToGroceryStore);
+        tasksManager.renewSubtask(newFillUpAtGasStation);
 
         System.out.println("Списки эпиков, задач и подзадач после изменения статусов у задач и подзадач:");
         System.out.println(tasksManager.getEpics());
@@ -56,8 +57,8 @@ public class Main {
         System.out.println(tasksManager.getSubtasks());
         System.out.println();
 
-        tasksManager.deleteTaskById(0);
-        tasksManager.deleteEpicById(2);
+        tasksManager.removeTaskById(0);
+        tasksManager.removeEpicById(2);
 
         System.out.println("Списки эпиков, задач и подзадач после удаления одной из задач и одного из эпиков:");
         System.out.println(tasksManager.getEpics());

@@ -1,17 +1,22 @@
 package tasks;
 
-import java.util.Objects;
-
 public class Task {
     private String name;
     private String description;
-    private int id;
     private Statuses status;
+    private int id;
 
     public Task(String name, String description, Statuses status) {
         this.name = name;
         this.description = description;
         this.status = status;
+    }
+
+    public Task(Task oldTask, String name, String description, Statuses status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.id = oldTask.id;
     }
 
     public String getName() {

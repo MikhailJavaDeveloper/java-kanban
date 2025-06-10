@@ -9,6 +9,14 @@ public class Subtask extends Task {
         epic.addSubtask(this);
     }
 
+    public Subtask(Subtask oldSubtask, String name, String description, Statuses status) {
+        super(name, description, status);
+        this.setId(oldSubtask.getId());
+        this.epic = oldSubtask.getEpic();
+        epic.removeSubtask(oldSubtask);
+        epic.addSubtask(this);
+    }
+
     public Epic getEpic() {
         return epic;
     }
