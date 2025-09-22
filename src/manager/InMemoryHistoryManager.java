@@ -1,14 +1,16 @@
 package manager;
 
+import org.junit.jupiter.api.Test;
 import tasks.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
     Node head = null;
     Node tail = null;
-    HashMap<Integer, Node> taskNodesById;
+    Map<Integer, Node> taskNodesById;
 
     public InMemoryHistoryManager() {
         taskNodesById = new HashMap<>();
@@ -41,7 +43,13 @@ public class InMemoryHistoryManager implements HistoryManager {
     public Node removeNode(Node node) {
         if (node.getPrev() != null) node.getPrev().setNext(node.getNext());
         if (node.getNext() != null) node.getNext().setPrev(node.getPrev());
+        taskNodesById.remove(node.getValue().getId());
         return node;
+    }
+
+    @Override
+    public void remove(int id) {
+        removeNode(taskNodesById.get(id));
     }
 
     @Override

@@ -11,6 +11,8 @@ public interface HistoryManager {
 
     public Node removeNode(Node node);
 
+    public void remove(int id);
+
     public ArrayList<Task> getTasks();
 
     public ArrayList<Task> getHistory();
