@@ -41,22 +41,22 @@ public class Main {
         System.out.println();
 
 
-        taskManager.getTaskById(0);
+        taskManager.getTaskById(1);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getSubtaskById(3);
+        taskManager.getSubtaskById(4);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getEpicById(2);
+        taskManager.getEpicById(3);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getTaskById(0);
+        taskManager.getTaskById(1);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
@@ -86,24 +86,24 @@ public class Main {
         System.out.println();
 
 
-        taskManager.getTaskById(0);
+        taskManager.getTaskById(1);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getSubtaskById(4);
+        taskManager.getSubtaskById(5);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getEpicById(5);
+        taskManager.getEpicById(6);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
 
-        taskManager.removeTaskById(0);
-        taskManager.removeEpicById(2);
+        taskManager.removeTaskById(1);
+        taskManager.removeEpicById(3);
 
         System.out.println("Списки эпиков, задач и подзадач после удаления одной из задач и одного из эпиков:");
         System.out.println(taskManager.getEpics());
@@ -112,27 +112,27 @@ public class Main {
         System.out.println();
 
 
-        taskManager.getTaskById(1);
+        taskManager.getTaskById(2);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getSubtaskById(6);
+        taskManager.getSubtaskById(7);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getEpicById(5);
+        taskManager.getEpicById(6);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getTaskById(1);
+        taskManager.getTaskById(2);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        taskManager.getEpicById(5);
+        taskManager.getEpicById(6);
         System.out.println("История просмотров:");
         System.out.println(taskManager.getHistory());
         System.out.println();

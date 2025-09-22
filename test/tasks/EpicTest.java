@@ -50,4 +50,26 @@ class EpicTest {
         assertNotEquals(statusBefore, statusAfter, "После изменения статуса подзадачи эпика," +
             "статус эпика должен поменяться.");
     }
+
+    @Test
+    void shouldBeNoIrrelevantSubtaskIDsLeftInsideEpic() {
+        TaskManager taskManager = Managers.getDefault();
+        Epic buyGroceries = new Epic("Купить продукты", "Купить продкты домой");
+        Subtask writeList = new Subtask("Написать список", "Написать список продуктов," +
+                " которые нужно купить", TaskStatuses.IN_PROGRESS, buyGroceries);
+        Subtask goToGroceryStore = new Subtask("Пойти в магазин",
+                "Пойти в продуктовый магазин и купить там все продукты из списка", TaskStatuses.NEW,
+                buyGroceries);
+        taskManager.putEpic(buyGroceries);
+        taskManager.putSubtask(writeList);
+        taskManager.putSubtask(goToGroceryStore);
+
+        taskManager.removeSubtaskById(writeList.getId());
+        boolean result = false;
+        for (Subtask subtask: buyGroceries.getSubtasks()) {
+            if (subtask.getId() == writeList.getId()) result = true;
+        }
+
+        assertFalse(result, "Внутри эпиков не должно оставаться неактуальных id подзадач.");
+    }
 }

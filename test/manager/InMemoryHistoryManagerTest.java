@@ -54,7 +54,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldReturnCorrectArrayOfTasks() {
+    void shouldReturnCorrectListOfTasks() {
         Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatuses.NEW);
         taskManager.putTask(task);
         taskManager.getTaskById(task.getId());
@@ -67,5 +67,20 @@ class InMemoryHistoryManagerTest {
         assertEquals(1, history.size(), "Неправильный размер массива.");
         assertEquals(task, history.get(0), "Задачи не совпадают.");
         assertEquals(tasks, history, "Массивы не совпадают.");
+    }
+
+    @Test
+    void shouldRemoveTaskFromHistoryWhenDeletingTask() {
+        Task washDishes = new Task("Помыть посуду", "Нужно нанести мыло для посуды на губку, " +
+                "брать посуду одну за другой, намыливать их губкой, " +
+                "а затем смывать мыло и класть посуду на место", TaskStatuses.NEW);
+        taskManager.putTask(washDishes);
+        taskManager.getTaskById(washDishes.getId());
+        ArrayList<Task> expected = new ArrayList<>();
+
+        taskManager.removeTaskById(washDishes.getId());
+        ArrayList<Task> resultHistory = taskManager.getHistory();
+
+        assertEquals(expected, resultHistory, "История не пустая.");
     }
 }
