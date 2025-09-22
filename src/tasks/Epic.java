@@ -68,7 +68,7 @@ public class Epic extends Task {
         int statusDoneCount = 0;
         for (Subtask subtask1 : subtasks) {
             if (subtask1.getStatus().equals(TaskStatuses.NEW)) statusNewCount++;
-            else if(subtask1.getStatus().equals(TaskStatuses.DONE)) statusDoneCount++;
+            else if (subtask1.getStatus().equals(TaskStatuses.DONE)) statusDoneCount++;
         }
         if (subtasks.size() == statusNewCount) this.setStatus(TaskStatuses.NEW);
         else if (subtasks.size() == statusDoneCount) this.setStatus(TaskStatuses.DONE);
