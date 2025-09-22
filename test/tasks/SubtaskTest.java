@@ -1,9 +1,9 @@
-package test;
+package tasks;
 
+import manager.Managers;
+import manager.TaskManager;
 import  org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
-import tasks.*;
 
 class SubtaskTest {
     @Test
@@ -17,11 +17,5 @@ class SubtaskTest {
         boolean result = subtask1.equals(subtask2);
 
         assertTrue(result, "Подзадачи с одинаковым id должны быть равны.");
-    }
-
-    @Test
-    void shouldNotWorkIfSubtaskIsAddedAsEpicToItself() {
-        Subtask subtask = new Subtask("А", "Б", TaskStatuses.DONE, null);
-        subtask.setEpic(subtask);
     }
 }

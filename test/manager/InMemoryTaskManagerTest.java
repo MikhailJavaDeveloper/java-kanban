@@ -1,10 +1,13 @@
-package test;
+package manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatuses;
 
-import tasks.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 

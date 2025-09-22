@@ -25,12 +25,12 @@ public class Epic extends Task {
         checkStatus();
     }
 
-    void removeSubtask(Subtask subtask) {
+    public void removeSubtask(Subtask subtask) {
         subtasks.remove(subtask);
         checkStatus();
     }
 
-    ArrayList<Subtask> getSubtasks() {
+    public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
 

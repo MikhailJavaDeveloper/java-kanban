@@ -1,4 +1,6 @@
-package tasks;
+package manager;
+
+import tasks.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -152,8 +154,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HistoryManager getHistoryManager() {
-        return historyManager;
+    public ArrayList<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     public int generateTaskId() {

@@ -1,9 +1,11 @@
-package test;
+package manager;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
-import tasks.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,7 @@ class ManagersTest {
     @Test
     void shouldReturnInitialisedHistoryManagerExemplar() {
         HistoryManager historyManager = Managers.getDefaultHistory();
-        Task[] history = historyManager.getHistory();
+        ArrayList<Task> history = historyManager.getHistory();
 
         assertNotNull(history, "После создания менеджера истории просмотров," +
                 "список истории просмотров должен быть проинициализирован.");

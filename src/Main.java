@@ -1,3 +1,5 @@
+import manager.Managers;
+import manager.TaskManager;
 import tasks.*;
 
 import java.util.Arrays;
@@ -24,7 +26,6 @@ public class Main {
             TaskStatuses.NEW, refillCarGasTank);
 
         TaskManager taskManager = Managers.getDefault();
-        HistoryManager historyManager = taskManager.getHistoryManager();
         taskManager.putTask(washDishes);
         taskManager.putTask(assemblePuzzle);
         taskManager.putEpic(buyGroceries);
@@ -42,22 +43,22 @@ public class Main {
 
         taskManager.getTaskById(0);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getSubtaskById(3);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getEpicById(2);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getTaskById(0);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
 
@@ -87,17 +88,17 @@ public class Main {
 
         taskManager.getTaskById(0);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getSubtaskById(4);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getEpicById(5);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
 
@@ -113,33 +114,33 @@ public class Main {
 
         taskManager.getTaskById(1);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getSubtaskById(6);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getEpicById(5);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getTaskById(1);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
         taskManager.getEpicById(5);
         System.out.println("История просмотров:");
-        System.out.println(Arrays.toString(historyManager.getHistory()));
+        System.out.println(taskManager.getHistory());
         System.out.println();
 
-        printAllTasks(taskManager, historyManager);
+        printAllTasks(taskManager);
     }
 
-    private static void printAllTasks(TaskManager manager, HistoryManager historyManager) {
+    private static void printAllTasks(TaskManager manager) {
         System.out.println("Задачи:");
         for (Task task : manager.getTasks()) {
             System.out.println(task);
@@ -158,7 +159,7 @@ public class Main {
         }
 
         System.out.println("История:");
-        for (Task task : historyManager.getHistory()) {
+        for (Task task : manager.getHistory()) {
             System.out.println(task);
         }
     }
