@@ -1,6 +1,5 @@
 package manager;
 
-import org.junit.jupiter.api.Test;
 import tasks.*;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public ArrayList<Task> getTasks() {
         Node node = head;
         ArrayList<Task> history = new ArrayList<>();
-        while(node != null) {
+        while (node != null) {
             history.add(node.getValue());
             node = node.getNext();
         }
