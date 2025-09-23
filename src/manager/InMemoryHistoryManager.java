@@ -9,49 +9,49 @@ import java.util.Map;
 public class InMemoryHistoryManager implements HistoryManager {
     Node head = null;
     Node tail = null;
-    Map<Integer, Node> taskNodesById;
+    Map<Integer, Node> nodes;
 
     public InMemoryHistoryManager() {
-        taskNodesById = new HashMap<>();
+        nodes = new HashMap<>();
     }
 
     @Override
     public Node add(Task task) {
         if (task == null) return null;
-        if (taskNodesById.containsKey(task.getId())) removeNode(taskNodesById.get(task.getId()));
+        if (nodes.containsKey(task.getId())) removeNode(nodes.get(task.getId()));
         Node node = new Node(task, tail, null);
         return linkLast(node);
     }
 
     @Override
-    public Node linkLast(Node node) {
-        if (node == null) return null;
-        if (taskNodesById.containsKey(node.getValue().getId())) removeNode(node);
-        tail = node;
-        if (head == null) head = node;
-        else node.getPrev().setNext(node);
-        taskNodesById.put(node.getValue().getId(), node);
-        return node;
+    public void remove(int id) {
+        removeNode(nodes.get(id));
+        nodes.remove(id);
     }
 
     @Override
-    public Node removeNode(Node node) {
+    public ArrayList<Task> getHistory() {
+        return getTasks();
+    }
+
+    private Node linkLast(Node node) {
+        if (head == null) head = node;
+        else tail.setNext(node);
+        tail = node;
+        nodes.put(node.getValue().getId(), node);
+        return node;
+    }
+
+    private Node removeNode(Node node) {
         if (node == null) return null;
         if (node.getPrev() != null) node.getPrev().setNext(node.getNext());
         if (node.getNext() != null) node.getNext().setPrev(node.getPrev());
         if (node == head) head = node.getNext();
         if (node == tail) tail = node.getPrev();
-        taskNodesById.remove(node.getValue().getId());
         return node;
     }
 
-    @Override
-    public void remove(int id) {
-        removeNode(taskNodesById.get(id));
-    }
-
-    @Override
-    public ArrayList<Task> getTasks() {
+    private ArrayList<Task> getTasks() {
         Node node = head;
         ArrayList<Task> history = new ArrayList<>();
         while (node != null) {
@@ -59,10 +59,5 @@ public class InMemoryHistoryManager implements HistoryManager {
             node = node.getNext();
         }
         return history;
-    }
-
-    @Override
-    public ArrayList<Task> getHistory() {
-        return getTasks();
     }
 }

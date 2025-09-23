@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class NodeTest {
     @Test
-    void shouldSucccessfullySetValuePrevAndNextAntThanGetValuePrevAndNext() {
+    void shouldSuccessfullySetValuePrevAndNextAndThanGetValuePrevAndNext() {
         Node node = new Node(null, null, null);
         Task washDishes = new Task("Помыть посуду", "Нужно нанести мыло для посуды на губку, " +
                 "брать посуду одну за другой, намыливать их губкой, " +
