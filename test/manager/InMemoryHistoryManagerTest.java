@@ -1,10 +1,13 @@
-package test;
+package manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import tasks.Task;
+import tasks.TaskStatuses;
 
-import tasks.*;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
     TaskManager taskManager;
@@ -28,7 +31,7 @@ class InMemoryHistoryManagerTest {
         Task newWashDishes = new Task(washDishes, "А", "Б",
             TaskStatuses.IN_PROGRESS);
         taskManager.renewTask(newWashDishes);
-        Task taskFromHistory = taskManager.getHistoryManager().getHistory()[0];
+        Task taskFromHistory = taskManager.getHistory().get(0);
         String nameAfter = taskFromHistory.getName();
         String descriptionAfter = taskFromHistory.getDescription();
         TaskStatuses statusAfter = taskFromHistory.getStatus();
@@ -44,25 +47,40 @@ class InMemoryHistoryManagerTest {
         taskManager.putTask(task);
 
         taskManager.getTaskById(task.getId());
-        Task taskFromHistory = taskManager.getHistoryManager().getHistory()[0];
+        Task taskFromHistory = taskManager.getHistory().get(0);
 
         assertNotNull(taskFromHistory, "Задача не найдена.");
         assertEquals(task, taskFromHistory, "Задачи не совпадают.");
     }
 
     @Test
-    void shouldReturnCorrectArrayOfTasks() {
+    void shouldReturnCorrectListOfTasks() {
         Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatuses.NEW);
         taskManager.putTask(task);
         taskManager.getTaskById(task.getId());
-        Task taskFromHistory = taskManager.getHistoryManager().getHistory()[0];
-        Task[] tasks = new Task[10];
-        tasks[0] = task;
+        Task taskFromHistory = taskManager.getHistory().get(0);
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(task);
 
-        Task[] history = taskManager.getHistoryManager().getHistory();
+        ArrayList<Task> history = taskManager.getHistory();
 
-        assertEquals(10, history.length, "Неправильный размер массива.");
-        assertEquals(task, history[0], "Задачи не совпадают.");
-        assertArrayEquals(tasks, history, "Массивы не совпадают.");
+        assertEquals(1, history.size(), "Неправильный размер массива.");
+        assertEquals(task, history.get(0), "Задачи не совпадают.");
+        assertEquals(tasks, history, "Массивы не совпадают.");
+    }
+
+    @Test
+    void shouldRemoveTaskFromHistoryWhenDeletingTask() {
+        Task washDishes = new Task("Помыть посуду", "Нужно нанести мыло для посуды на губку, " +
+                "брать посуду одну за другой, намыливать их губкой, " +
+                "а затем смывать мыло и класть посуду на место", TaskStatuses.NEW);
+        taskManager.putTask(washDishes);
+        taskManager.getTaskById(washDishes.getId());
+        ArrayList<Task> expected = new ArrayList<>();
+
+        taskManager.removeTaskById(washDishes.getId());
+        ArrayList<Task> resultHistory = taskManager.getHistory();
+
+        assertEquals(expected, resultHistory, "История не пустая.");
     }
 }
