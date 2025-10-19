@@ -5,7 +5,7 @@ import tasks.*;
 import java.util.ArrayList;
 
 public interface HistoryManager {
-    public Node add(Task task);
+    public void add(Task task);
 
     public void remove(int id);
 
