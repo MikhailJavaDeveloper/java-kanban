@@ -9,7 +9,7 @@ public class CSVFormatter {
         return "id,type,name,status,description,epic";
     }
 
-    public static String toString(Task task) throws IOException{
+    public static String toString(Task task) throws IOException {
         switch (task.getType()) {
             case TaskTypes.TASK:
                 switch (task.getStatus()) {
