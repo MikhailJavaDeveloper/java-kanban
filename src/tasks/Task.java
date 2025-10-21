@@ -7,6 +7,7 @@ public class Task {
     private String description;
     private TaskStatuses status;
     private int id;
+    protected TaskTypes type = TaskTypes.TASK;
 
     public Task(String name, String description, TaskStatuses status) {
         this.name = name;
@@ -49,6 +50,10 @@ public class Task {
 
     protected void setStatus(TaskStatuses status) {
         this.status = status;
+    }
+
+    public TaskTypes getType() {
+        return type;
     }
 
     @Override

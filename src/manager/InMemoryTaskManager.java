@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int taskId;
-    private final Map<Integer, Task> tasks;
-    private final Map<Integer, Subtask> subtasks;
-    private final Map<Integer, Epic> epics;
-    private final HistoryManager historyManager;
+    protected int taskId;
+    protected final Map<Integer, Task> tasks;
+    protected final Map<Integer, Subtask> subtasks;
+    protected final Map<Integer, Epic> epics;
+    protected final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         taskId = 1;
@@ -173,7 +173,7 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    public int generateTaskId() {
+    protected int generateTaskId() {
         return taskId++;
     }
 }
