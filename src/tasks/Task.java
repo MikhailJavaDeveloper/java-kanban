@@ -10,8 +10,8 @@ public class Task {
     private TaskStatuses status;
     private int id;
     protected TaskTypes type = TaskTypes.TASK;
-    private final Duration duration;
-    private final LocalDateTime startTime;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String name, String description, TaskStatuses status, Duration duration, LocalDateTime startTime) {
         this.name = name;
@@ -63,12 +63,24 @@ public class Task {
         return type;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long minutes) {
+        this.duration = Duration.ofMinutes(minutes);
+    }
+
     public long getDurationInMinutes() {
         return duration.toMinutes();
     }
 
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public LocalDateTime getEndTime() {
