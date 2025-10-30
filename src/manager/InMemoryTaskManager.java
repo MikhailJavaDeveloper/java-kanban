@@ -2,6 +2,7 @@ package manager;
 
 import tasks.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -186,8 +187,22 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void addTaskInPT(Task task) {
-        if (task.getStartTime() != null) {
+        if (task.getStartTime() != null && !hasOverlap(task)) {
             prioritizedTasks.add(task);
         }
+    }
+
+    private boolean isOverlap(Task task1, Task task2) {
+        LocalDateTime start1 = task1.getStartTime();
+        LocalDateTime end1 = task1.getEndTime();
+        LocalDateTime start2 = task2.getStartTime();
+        LocalDateTime end2 = task2.getEndTime();
+
+        return start1.isBefore(end2) && start2.isBefore(end1);
+    }
+
+    public boolean hasOverlap(Task task) {
+        return prioritizedTasks.stream()
+                .anyMatch(t -> isOverlap(task, t));
     }
 }
