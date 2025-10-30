@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Optional;
 
 public class Epic extends Task {
@@ -73,6 +72,7 @@ public class Epic extends Task {
                 ", status=" + getStatus() +
                 ", duration=" + getDurationInMinutes() +
                 ", startTime=" + getStartTime() +
+                ", endTime=" + getEndTime() +
                 ", subtasks.size=" + subtasks.size() +
                 '}';
     }

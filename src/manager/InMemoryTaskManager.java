@@ -2,9 +2,7 @@ package manager;
 
 import tasks.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int taskId;
@@ -12,6 +10,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Subtask> subtasks;
     protected final Map<Integer, Epic> epics;
     protected final HistoryManager historyManager;
+    protected final Set<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
         taskId = 1;
@@ -19,6 +18,7 @@ public class InMemoryTaskManager implements TaskManager {
         this.subtasks = new HashMap<>();
         this.epics = new HashMap<>();
         historyManager = Managers.getDefaultHistory();
+        prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
     }
 
     @Override
@@ -31,6 +31,7 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean clearTasks() {
         for (Task task : tasks.values()) {
             historyManager.remove(task.getId());
+            prioritizedTasks.remove(task);
         }
         tasks.clear();
         return tasks.isEmpty();
@@ -46,18 +47,22 @@ public class InMemoryTaskManager implements TaskManager {
     public Task putTask(Task task) {
         task.setId(generateTaskId());
         tasks.put(task.getId(), task);
+        addTaskInPT(task);
         return tasks.get(task.getId());
     }
 
     @Override
     public Task renewTask(Task newTask) {
         tasks.put(newTask.getId(), newTask);
+        prioritizedTasks.remove(newTask);
+        addTaskInPT(newTask);
         return tasks.get(newTask.getId());
     }
 
     @Override
     public Task removeTaskById(int id) {
         historyManager.remove(id);
+        prioritizedTasks.remove(tasks.get(id));
         return tasks.remove(id);
     }
 
@@ -73,6 +78,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (Subtask subtask : subtasks.values()) {
             historyManager.remove(subtask.getId());
             subtask.getEpic().removeSubtask(subtask);
+            prioritizedTasks.remove(subtask);
         }
         subtasks.clear();
         return subtasks.isEmpty();
@@ -88,12 +94,15 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask putSubtask(Subtask subtask) {
         subtask.setId(generateTaskId());
         subtasks.put(subtask.getId(), subtask);
+        addTaskInPT(subtask);
         return subtasks.get(subtask.getId());
     }
 
     @Override
     public Subtask renewSubtask(Subtask newSubtask) {
         subtasks.put(newSubtask.getId(), newSubtask);
+        prioritizedTasks.remove(newSubtask);
+        addTaskInPT(newSubtask);
         return subtasks.get(newSubtask.getId());
     }
 
@@ -101,6 +110,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask removeSubtaskById(int id) {
         historyManager.remove(id);
         subtasks.get(id).getEpic().removeSubtask(subtasks.get(id));
+        prioritizedTasks.remove(subtasks.get(id));
         return subtasks.remove(id);
     }
 
@@ -118,6 +128,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         for (Subtask subtask : subtasks.values()) {
             historyManager.remove(subtask.getId());
+            prioritizedTasks.remove(subtask);
         }
         subtasks.clear();
         epics.clear();
@@ -148,6 +159,7 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.remove(id);
         for (Subtask subtask : epics.get(id).getSubtasks()) {
             historyManager.remove(subtask.getId());
+            prioritizedTasks.remove(subtasks.get(subtask.getId()));
             subtasks.remove(subtask.getId());
         }
         return epics.remove(id);
@@ -164,7 +176,18 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return prioritizedTasks.stream().toList();
+    }
+
     protected int generateTaskId() {
         return taskId++;
+    }
+
+    private void addTaskInPT(Task task) {
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
     }
 }
