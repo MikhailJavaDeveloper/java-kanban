@@ -10,6 +10,9 @@ import tasks.TaskStatuses;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,13 +54,16 @@ public class FileBackedTaskManagerTest {
             File.createTempFile("few-tasks", "csv");
             File file = new File("few-tasks.csv");
             TaskManager taskManager = new FileBackedTaskManager(file);
-            Task task = new Task("Task", "Description", TaskStatuses.DONE);
+            Task task = new Task("Task", "Description", TaskStatuses.DONE, Duration.ofMinutes(10),
+                    LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
             Epic epic = new Epic("Epic", "Description");
-            Subtask subtask = new Subtask("Subtask", "Description", TaskStatuses.IN_PROGRESS, epic);
+            Subtask subtask = new Subtask("Subtask", "Description",
+                    TaskStatuses.IN_PROGRESS, epic, Duration.ofMinutes(15),
+                    LocalDateTime.of(2016, Month.FEBRUARY, 16, 14, 0, 0));
             String expectedText = "id,type,name,status,description,epic" + System.lineSeparator() +
-                    "1,TASK,Task,DONE,Description," + System.lineSeparator() +
+                    "1,TASK,Task,DONE,Description,10,2016-02-15T12:30," + System.lineSeparator() +
                     "2,EPIC,Epic,IN_PROGRESS,Description," + System.lineSeparator() +
-                    "3,SUBTASK,Subtask,IN_PROGRESS,Description,2" + System.lineSeparator();
+                    "3,SUBTASK,Subtask,IN_PROGRESS,Description,15,2016-02-16T14:00,2" + System.lineSeparator();
 
             taskManager.putTask(task);
             taskManager.putEpic(epic);
@@ -76,9 +82,12 @@ public class FileBackedTaskManagerTest {
             File.createTempFile("few-tasks", "csv");
             File file = new File("few-tasks.csv");
             TaskManager taskManager1 = new FileBackedTaskManager(file);
-            Task task = new Task("Task", "Description", TaskStatuses.DONE);
+            Task task = new Task("Task", "Description", TaskStatuses.DONE, Duration.ofMinutes(10),
+                    LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
             Epic epic = new Epic("Epic", "Description");
-            Subtask subtask = new Subtask("Subtask", "Description", TaskStatuses.IN_PROGRESS, epic);
+            Subtask subtask = new Subtask("Subtask", "Description",
+                    TaskStatuses.IN_PROGRESS, epic, Duration.ofMinutes(15),
+                    LocalDateTime.of(2016, Month.FEBRUARY, 16, 17, 15, 0));
             taskManager1.putTask(task);
             taskManager1.putEpic(epic);
             taskManager1.putSubtask(subtask);
@@ -99,9 +108,13 @@ public class FileBackedTaskManagerTest {
             File.createTempFile("temp", "csv");
             File file = new File("temp.csv");
             TaskManager taskManager = new FileBackedTaskManager(file);
-            Task oldTask = new Task("OldTask", "OldDescription", TaskStatuses.NEW);
+            Task oldTask = new Task("OldTask", "OldDescription",
+                    TaskStatuses.NEW, Duration.ofMinutes(10),
+                    LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
             taskManager.putTask(oldTask);
-            Task newTask = new Task(oldTask, "NewTask", "NewDescription", TaskStatuses.DONE);
+            Task newTask = new Task(oldTask, "NewTask", "NewDescription",
+                    TaskStatuses.DONE, Duration.ofMinutes(15),
+                    LocalDateTime.of(2016, Month.FEBRUARY, 16, 14, 45, 0));
 
             taskManager.renewTask(newTask);
 

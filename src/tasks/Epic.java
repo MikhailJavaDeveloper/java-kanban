@@ -1,23 +1,26 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<Subtask> subtasks;
 
     public Epic(String name, String description) {
-        super(name, description, TaskStatuses.NEW);
+        super(name, description, TaskStatuses.NEW, Duration.ofMinutes(0),
+            LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0, 0));
         this.subtasks = new ArrayList<>();
         type = TaskTypes.EPIC;
     }
 
     public Epic(Epic oldEpic, String name, String description) {
-        super(name, description, TaskStatuses.NEW);
+        super(name, description, TaskStatuses.NEW, Duration.ofMinutes(0),
+                LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0, 0));
         this.setId(oldEpic.getId());
         this.subtasks = oldEpic.getSubtasks();
-        for (Subtask subtask : subtasks) {
-            subtask.setEpic(this);
-        }
+        subtasks.forEach(s -> s.setEpic(this));
         checkStatus();
         type = TaskTypes.EPIC;
     }
@@ -56,6 +59,8 @@ public class Epic extends Task {
                 ", description.length=" + getDescription().length() +
                 ", id=" + getId() +
                 ", status=" + getStatus() +
+                ", duration=" + getDurationInMinutes() +
+                ", startTime=" + getStartTime() +
                 ", subtasks.size=" + subtasks.size() +
                 '}';
     }
@@ -66,12 +71,12 @@ public class Epic extends Task {
             return;
         }
 
-        int statusNewCount = 0;
-        int statusDoneCount = 0;
-        for (Subtask subtask1 : subtasks) {
-            if (subtask1.getStatus().equals(TaskStatuses.NEW)) statusNewCount++;
-            else if (subtask1.getStatus().equals(TaskStatuses.DONE)) statusDoneCount++;
-        }
+        long statusNewCount = subtasks.stream()
+                .filter(s -> s.getStatus() == TaskStatuses.NEW)
+                .count();
+        long statusDoneCount = subtasks.stream()
+                .filter(s -> s.getStatus() == TaskStatuses.DONE)
+                .count();
         if (subtasks.size() == statusNewCount) this.setStatus(TaskStatuses.NEW);
         else if (subtasks.size() == statusDoneCount) this.setStatus(TaskStatuses.DONE);
         else this.setStatus(TaskStatuses.IN_PROGRESS);

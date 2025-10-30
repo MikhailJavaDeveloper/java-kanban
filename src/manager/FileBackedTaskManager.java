@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -176,12 +179,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public static void main(String[] args) {
-        Task task1 = new Task("Task1", "Description", TaskStatuses.NEW);
-        Task task2 = new Task("Task2", "Description", TaskStatuses.IN_PROGRESS);
+        Task task1 = new Task("Task1", "Description", TaskStatuses.NEW, Duration.ofMinutes(10),
+                LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
+        Task task2 = new Task("Task2", "Description", TaskStatuses.IN_PROGRESS, Duration.ofMinutes(15),
+                LocalDateTime.of(2016, Month.FEBRUARY, 16, 14, 0, 0));
         Epic epic1 = new Epic("Epic1", "Description");
         Epic epic2 = new Epic("Epic2", "Description");
-        Subtask subtask1 = new Subtask("Subtask1", "Description", TaskStatuses.DONE, epic1);
-        Subtask subtask2 = new Subtask("Subtask2", "Description", TaskStatuses.IN_PROGRESS, epic2);
+        Subtask subtask1 = new Subtask("Subtask1", "Description",
+                TaskStatuses.DONE, epic1, Duration.ofMinutes(15),
+                LocalDateTime.of(2016, Month.FEBRUARY, 17, 1, 45, 0));
+        Subtask subtask2 = new Subtask("Subtask2", "Description",
+                TaskStatuses.IN_PROGRESS, epic2, Duration.ofMinutes(10),
+                LocalDateTime.of(2016, Month.FEBRUARY, 18, 22, 30, 0));
 
         TaskManager taskManager = Managers.getDefault();
         taskManager.putTask(task1);

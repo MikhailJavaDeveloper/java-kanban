@@ -3,6 +3,11 @@ package tasks;
 import manager.Managers;
 import manager.TaskManager;
 import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
@@ -26,7 +31,8 @@ class EpicTest {
 
         Subtask fillUpAtGasStation = new Subtask("Заправиться на заправке",
             "Подъехать к колонке, выбрать нужный бензин и заправить бак необходимым количеством бензина",
-            TaskStatuses.DONE, refillCarGasTank);
+            TaskStatuses.DONE, refillCarGasTank, Duration.ofMinutes(10),
+                LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
         TaskStatuses statusAfter = refillCarGasTank.getStatus();
 
         assertNotEquals(statusBefore, statusAfter,
@@ -40,11 +46,13 @@ class EpicTest {
                 "Пополнить запасы бензина в баке машины");
         Subtask fillUpAtGasStation = new Subtask("Заправиться на заправке",
                 "Подъехать к колонке, выбрать нужный бензин и заправить бак необходимым количеством бензина",
-                TaskStatuses.NEW, refillCarGasTank);
+                TaskStatuses.NEW, refillCarGasTank, Duration.ofMinutes(10),
+                LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
         TaskStatuses statusBefore = refillCarGasTank.getStatus();
 
         Subtask newFillUpAtGasStation = new Subtask(fillUpAtGasStation, fillUpAtGasStation.getName(),
-                fillUpAtGasStation.getDescription(), TaskStatuses.DONE);
+                fillUpAtGasStation.getDescription(), TaskStatuses.DONE, Duration.ofMinutes(15),
+                LocalDateTime.of(2016, Month.FEBRUARY, 16, 12, 30, 0));
         TaskStatuses statusAfter = refillCarGasTank.getStatus();
 
         assertNotEquals(statusBefore, statusAfter, "После изменения статуса подзадачи эпика," +
@@ -56,19 +64,19 @@ class EpicTest {
         TaskManager taskManager = Managers.getDefault();
         Epic buyGroceries = new Epic("Купить продукты", "Купить продкты домой");
         Subtask writeList = new Subtask("Написать список", "Написать список продуктов," +
-                " которые нужно купить", TaskStatuses.IN_PROGRESS, buyGroceries);
+                " которые нужно купить", TaskStatuses.IN_PROGRESS, buyGroceries, Duration.ofMinutes(10),
+                LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
         Subtask goToGroceryStore = new Subtask("Пойти в магазин",
                 "Пойти в продуктовый магазин и купить там все продукты из списка", TaskStatuses.NEW,
-                buyGroceries);
+                buyGroceries, Duration.ofMinutes(16),
+                LocalDateTime.of(2016, Month.FEBRUARY, 16, 12, 30, 0));
         taskManager.putEpic(buyGroceries);
         taskManager.putSubtask(writeList);
         taskManager.putSubtask(goToGroceryStore);
 
         taskManager.removeSubtaskById(writeList.getId());
-        boolean result = false;
-        for (Subtask subtask: buyGroceries.getSubtasks()) {
-            if (subtask.getId() == writeList.getId()) result = true;
-        }
+        boolean result = buyGroceries.getSubtasks().stream()
+                        .anyMatch(s -> s.getId() == writeList.getId());
 
         assertFalse(result, "Внутри эпиков не должно оставаться неактуальных id подзадач.");
     }
