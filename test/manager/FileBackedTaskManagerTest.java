@@ -124,7 +124,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
             taskManager1.renewTask(newTask);
 
-            assertEquals(newTask, taskManager1.getTaskById(oldTask.getId()), "Не обновил задачу.");
+            assertEquals(newTask, taskManager1.getTaskById(oldTask.getId()).orElse(null), "Не обновил задачу.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }
@@ -157,7 +157,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
                 Task task = new Task("Task", "Desc", TaskStatuses.IN_PROGRESS, Duration.ofMinutes(10),
                         LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0, 0));
                 taskManager1.putTask(task);
-            }, "Ожидалось исключение ManagerSaveException при попытке сохранить в read-only файл");
+            }, "Ожидалось исключение ManagerSaveException при попытке сохранить в read-only файл.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }

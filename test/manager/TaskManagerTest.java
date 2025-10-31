@@ -28,4 +28,22 @@ public abstract class TaskManagerTest <T extends TaskManager> {
 
         assertEquals(tasks, result, "Ошибка в определении перекрытия задач.");
     }
+
+    @Test
+    void shouldReturnCorrectPrioritizedTasksList() {
+        Task task1 = new Task("Task1", "Desc", TaskStatuses.IN_PROGRESS, Duration.ofMinutes(10),
+                LocalDateTime.of(1970, Month.JANUARY, 1, 2, 0));
+        Task task2 = new Task("Task2", "Desc", TaskStatuses.IN_PROGRESS, Duration.ofMinutes(10),
+                LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0));
+        Task task3 = new Task("Task3", "Desc", TaskStatuses.IN_PROGRESS, Duration.ofMinutes(10),
+                LocalDateTime.of(1970, Month.JANUARY, 1, 1, 0));
+        List<Task> expected = List.of(task2, task3, task1);
+        taskManager.putTask(task1);
+        taskManager.putTask(task2);
+        taskManager.putTask(task3);
+
+        List<Task> result = taskManager.getPrioritizedTasks();
+
+        assertEquals(expected, result, "Списки задач не совпадают.");
+    }
 }

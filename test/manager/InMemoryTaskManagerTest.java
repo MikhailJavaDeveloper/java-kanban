@@ -36,9 +36,9 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         taskManager.putTask(washDishes);
         taskManager.putEpic(refillCarGasTank);
         taskManager.putSubtask(fillUpAtGasStation);
-        Task task = taskManager.getTaskById(washDishes.getId());
+        Task task = taskManager.getTaskById(washDishes.getId()).orElse(null);
         Epic epic = taskManager.getEpicById(refillCarGasTank.getId());
-        Subtask subtask = taskManager.getSubtaskById(fillUpAtGasStation.getId());
+        Subtask subtask = taskManager.getSubtaskById(fillUpAtGasStation.getId()).orElse(null);
 
         assertNotNull(task, "Задача не найдена.");
         assertNotNull(epic, "Эпик не найден.");
@@ -66,9 +66,9 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         taskManager.putEpic(refillCarGasTank);
         taskManager.putSubtask(fillUpAtGasStation);
 
-        Task task = taskManager.getTaskById(washDishes.getId());
+        Task task = taskManager.getTaskById(washDishes.getId()).orElse(null);
         Epic epic = taskManager.getEpicById(refillCarGasTank.getId());
-        Subtask subtask = taskManager.getSubtaskById(fillUpAtGasStation.getId());
+        Subtask subtask = taskManager.getSubtaskById(fillUpAtGasStation.getId()).orElse(null);
 
         assertEquals(washDishes, task, "Задача не найдена.");
         assertEquals(refillCarGasTank, epic, "Эпик не найден.");
@@ -120,7 +120,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
                 LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
         taskManager.putTask(task);
 
-        Task savedTask = taskManager.getTaskById(task.getId());
+        Task savedTask = taskManager.getTaskById(task.getId()).orElse(null);
 
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
@@ -140,7 +140,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
                 LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
         taskManager.putTask(washDishes);
 
-        Task task = taskManager.getTaskById(washDishes.getId());
+        Task task = taskManager.getTaskById(washDishes.getId()).orElse(null);
 
         assertNotNull(task, "Задача не найдена.");
         assertEquals(washDishes, task, "Задачи не совпадают.");
@@ -155,7 +155,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         taskManager.putTask(washDishes);
 
         taskManager.removeTaskById(washDishes.getId());
-        Task task = taskManager.getTaskById(washDishes.getId());
+        Task task = taskManager.getTaskById(washDishes.getId()).orElse(null);
 
         assertNotEquals(washDishes, task, "Задачи совпадают.");
         assertNull(task, "Задача найдена.");
@@ -173,7 +173,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
                 LocalDateTime.of(2016, Month.FEBRUARY, 16, 12, 30, 0));
 
         taskManager.renewTask(newWashDishes);
-        Task task = taskManager.getTaskById(washDishes.getId());
+        Task task = taskManager.getTaskById(washDishes.getId()).orElse(null);
 
         assertNotNull(task, "Задача не найдена.");
         assertEquals(newWashDishes, task, "Задачи не совпадают.");

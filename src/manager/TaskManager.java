@@ -5,13 +5,14 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskManager {
     List<Task> getTasks();
 
     boolean clearTasks();
 
-    Task getTaskById(int id);
+    Optional<Task> getTaskById(int id);
 
     void putTask(Task task);
 
@@ -24,7 +25,7 @@ public interface TaskManager {
 
     boolean clearSubtasks();
 
-    Subtask getSubtaskById(int id);
+    Optional<Subtask> getSubtaskById(int id);
 
     void putSubtask(Subtask subtask);
 

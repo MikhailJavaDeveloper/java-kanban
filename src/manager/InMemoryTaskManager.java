@@ -39,9 +39,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(int id) {
+    public Optional<Task> getTaskById(int id) {
         historyManager.add(tasks.get(id));
-        return tasks.get(id);
+        return Optional.ofNullable(tasks.get(id));
     }
 
     @Override
@@ -89,9 +89,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask getSubtaskById(int id) {
+    public Optional<Subtask> getSubtaskById(int id) {
         historyManager.add(subtasks.get(id));
-        return subtasks.get(id);
+        return Optional.ofNullable(subtasks.get(id));
     }
 
     @Override

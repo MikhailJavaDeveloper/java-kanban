@@ -7,7 +7,6 @@ import tasks.Task;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class ManagersTest {
@@ -27,7 +26,7 @@ class ManagersTest {
     @Test
     void shouldReturnInitialisedHistoryManagerExemplar() {
         HistoryManager historyManager = Managers.getDefaultHistory();
-        ArrayList<Task> history = historyManager.getHistory();
+        List<Task> history = historyManager.getHistory();
 
         assertNotNull(history, "После создания менеджера истории просмотров," +
                 "список истории просмотров должен быть проинициализирован.");

@@ -119,4 +119,20 @@ class EpicTest {
         assertEquals(expected3, result3, "Статус эпика рассчитывается неправильно.");
         assertEquals(expected4, result4, "Статус эпика рассчитывается неправильно.");
     }
+
+    @Test
+    void shouldReturnCorrectEndTime() {
+        Epic epic = new Epic("Epic", "Desc");
+        Subtask subtask1 = new Subtask("Subtask1", "Desc", TaskStatuses.IN_PROGRESS, epic,
+                Duration.ofMinutes(10), LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0));
+        Duration duration = Duration.ofMinutes(15);
+        LocalDateTime startTime = LocalDateTime.of(1970, Month.JANUARY, 1, 1, 0);
+        Subtask subtask2 = new Subtask("Subtask2", "Desc", TaskStatuses.IN_PROGRESS, epic,
+                duration, startTime);
+        LocalDateTime expected = startTime.plus(duration);
+
+        LocalDateTime result = epic.getEndTime();
+
+        assertEquals(expected, result, "Дата и время окончания задачи не совпадают");
+    }
 }
