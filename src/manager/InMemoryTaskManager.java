@@ -45,19 +45,22 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task putTask(Task task) {
-        task.setId(generateTaskId());
-        tasks.put(task.getId(), task);
-        addTaskInPT(task);
-        return tasks.get(task.getId());
+    public void putTask(Task task) {
+        if (!hasOverlap(task)) {
+            task.setId(generateTaskId());
+            tasks.put(task.getId(), task);
+            addTaskInPT(task);
+        }
     }
 
     @Override
-    public Task renewTask(Task newTask) {
-        tasks.put(newTask.getId(), newTask);
+    public void renewTask(Task newTask) {
+        tasks.remove(newTask.getId());
         prioritizedTasks.remove(newTask);
-        addTaskInPT(newTask);
-        return tasks.get(newTask.getId());
+        if (!hasOverlap(newTask)) {
+            tasks.put(newTask.getId(), newTask);
+            addTaskInPT(newTask);
+        }
     }
 
     @Override
@@ -92,19 +95,22 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask putSubtask(Subtask subtask) {
-        subtask.setId(generateTaskId());
-        subtasks.put(subtask.getId(), subtask);
-        addTaskInPT(subtask);
-        return subtasks.get(subtask.getId());
+    public void putSubtask(Subtask subtask) {
+        if (!hasOverlap(subtask)) {
+            subtask.setId(generateTaskId());
+            subtasks.put(subtask.getId(), subtask);
+            addTaskInPT(subtask);
+        }
     }
 
     @Override
-    public Subtask renewSubtask(Subtask newSubtask) {
-        subtasks.put(newSubtask.getId(), newSubtask);
+    public void renewSubtask(Subtask newSubtask) {
+        subtasks.remove(newSubtask.getId());
         prioritizedTasks.remove(newSubtask);
-        addTaskInPT(newSubtask);
-        return subtasks.get(newSubtask.getId());
+        if (!hasOverlap(newSubtask)) {
+            subtasks.put(newSubtask.getId(), newSubtask);
+            addTaskInPT(newSubtask);
+        }
     }
 
     @Override
@@ -143,16 +149,19 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic putEpic(Epic epic) {
-        epic.setId(generateTaskId());
-        epics.put(epic.getId(), epic);
-        return epics.get(epic.getId());
+    public void putEpic(Epic epic) {
+        if (!hasOverlap(epic)) {
+            epic.setId(generateTaskId());
+            epics.put(epic.getId(), epic);
+        }
     }
 
     @Override
-    public Epic renewEpic(Epic newEpic) {
-        epics.put(newEpic.getId(), newEpic);
-        return epics.get(newEpic.getId());
+    public void renewEpic(Epic newEpic) {
+        epics.remove(newEpic.getId());
+        if (!hasOverlap(newEpic)) {
+            epics.put(newEpic.getId(), newEpic);
+        }
     }
 
     @Override
@@ -182,12 +191,12 @@ public class InMemoryTaskManager implements TaskManager {
         return prioritizedTasks.stream().toList();
     }
 
-    protected int generateTaskId() {
+    private int generateTaskId() {
         return taskId++;
     }
 
     private void addTaskInPT(Task task) {
-        if (task.getStartTime() != null && !hasOverlap(task)) {
+        if (task.getStartTime() != null) {
             prioritizedTasks.add(task);
         }
     }
@@ -201,7 +210,7 @@ public class InMemoryTaskManager implements TaskManager {
         return start1.isBefore(end2) && start2.isBefore(end1);
     }
 
-    public boolean hasOverlap(Task task) {
+    private boolean hasOverlap(Task task) {
         return prioritizedTasks.stream()
                 .anyMatch(t -> isOverlap(task, t));
     }

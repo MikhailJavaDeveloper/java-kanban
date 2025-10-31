@@ -23,7 +23,7 @@ public class CSVFormatterTest {
 
             String result = CSVFormatter.toString(task);
 
-            assertEquals(expectedString, result);
+            assertEquals(expectedString, result, "Строка из задачи должна быть другая.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }
@@ -39,7 +39,7 @@ public class CSVFormatterTest {
 
             Task result = CSVFormatter.fromString(string);
 
-            assertEquals(task, result);
+            assertEquals(task, result, "Задача из строки должна быть другая.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }

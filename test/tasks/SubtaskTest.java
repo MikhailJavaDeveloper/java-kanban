@@ -56,4 +56,13 @@ class SubtaskTest {
         assertTrue(result, "Подзадача должна быть дальше привязана к эпику после изменения имени, описания, " +
             "статуса и id.");
     }
+
+    @Test
+    void shouldHaveLinkedEpicForSubtask() {
+        Epic epic = new Epic("Epic", "Desc");
+        Subtask subtask = new Subtask("Subtask", "Desc", TaskStatuses.NEW, epic, Duration.ofMinutes(10),
+            LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0, 0));
+
+        assertEquals(epic, subtask.getEpic(), "Подзадача должна ссылаться на правильный эпик.");
+    }
 }

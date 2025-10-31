@@ -77,17 +77,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task putTask(Task task) {
-        Task putTask = super.putTask(task);
+    public void putTask(Task task) {
+        super.putTask(task);
         save();
-        return putTask;
     }
 
     @Override
-    public Task renewTask(Task newTask) {
-        Task renewed = super.renewTask(newTask);
+    public void renewTask(Task newTask) {
+        super.renewTask(newTask);
         save();
-        return renewed;
     }
 
     @Override
@@ -105,17 +103,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Subtask putSubtask(Subtask subtask) {
-        Subtask putSubtask = super.putSubtask(subtask);
+    public void putSubtask(Subtask subtask) {
+        super.putSubtask(subtask);
         save();
-        return putSubtask;
     }
 
     @Override
-    public Subtask renewSubtask(Subtask newSubtask) {
-        Subtask renewedSubtask = super.renewSubtask(newSubtask);
+    public void renewSubtask(Subtask newSubtask) {
+        super.renewSubtask(newSubtask);
         save();
-        return renewedSubtask;
     }
 
     @Override
@@ -133,17 +129,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Epic putEpic(Epic epic) {
-        Epic putEpic = super.putEpic(epic);
+    public void putEpic(Epic epic) {
+        super.putEpic(epic);
         save();
-        return putEpic;
     }
 
     @Override
-    public Epic renewEpic(Epic newEpic) {
-        Epic renewedEpic = super.renewEpic(newEpic);
+    public void renewEpic(Epic newEpic) {
+        super.renewEpic(newEpic);
         save();
-        return renewedEpic;
     }
 
     @Override

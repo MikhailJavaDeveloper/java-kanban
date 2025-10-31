@@ -1,6 +1,7 @@
 package manager;
 
 import exceptions.ManagerSaveException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
@@ -17,17 +18,26 @@ import java.time.Month;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
+    @BeforeEach
+    void initialiseTaskManager() {
+        try {
+            File testFile = File.createTempFile("test", ".csv");
+            taskManager = new FileBackedTaskManager(testFile);
+        } catch (IOException e) {
+            throw new ManagerSaveException("Произошла неизвестная ошибка");
+        }
+    }
+
     @Test
     void shouldSaveEmptyFile() {
         try {
-            File.createTempFile("empty", "csv");
-            File file = new File("empty.csv");
+            File file = File.createTempFile("empty", ".csv");
             TaskManager taskManager1 = new FileBackedTaskManager(file);
 
             boolean result = Files.readString(file.toPath()).isEmpty();
 
-            assertTrue(result);
+            assertTrue(result, "Пустой файл не сохранился.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }
@@ -36,13 +46,12 @@ public class FileBackedTaskManagerTest {
     @Test
     void shouldLoadEmptyFile() {
         try {
-            File.createTempFile("empty", "csv");
-            File file = new File("empty.csv");
+            File file = File.createTempFile("empty", ".csv");
             TaskManager taskManager2 = FileBackedTaskManager.loadFromFile(file);
 
             boolean result = Files.readString(file.toPath()).isEmpty();
 
-            assertTrue(result);
+            assertTrue(result, "Не загрузил пустой файл.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }
@@ -51,9 +60,8 @@ public class FileBackedTaskManagerTest {
     @Test
     void shouldSaveFewTasks() {
         try {
-            File.createTempFile("few-tasks", "csv");
-            File file = new File("few-tasks.csv");
-            TaskManager taskManager = new FileBackedTaskManager(file);
+            File file = File.createTempFile("few-tasks", ".csv");
+            TaskManager taskManager1 = new FileBackedTaskManager(file);
             Task task = new Task("Task", "Description", TaskStatuses.DONE, Duration.ofMinutes(10),
                     LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
             Epic epic = new Epic("Epic", "Description");
@@ -65,12 +73,12 @@ public class FileBackedTaskManagerTest {
                     "2,EPIC,Epic,IN_PROGRESS,Description," + System.lineSeparator() +
                     "3,SUBTASK,Subtask,IN_PROGRESS,Description,15,2016-02-16T14:00,2" + System.lineSeparator();
 
-            taskManager.putTask(task);
-            taskManager.putEpic(epic);
-            taskManager.putSubtask(subtask);
+            taskManager1.putTask(task);
+            taskManager1.putEpic(epic);
+            taskManager1.putSubtask(subtask);
             String result = Files.readString(file.toPath());
 
-            assertEquals(expectedText, result);
+            assertEquals(expectedText, result, "Не сохранил несколько задач.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }
@@ -79,8 +87,7 @@ public class FileBackedTaskManagerTest {
     @Test
     void shouldLoadFewTasks() {
         try {
-            File.createTempFile("few-tasks", "csv");
-            File file = new File("few-tasks.csv");
+            File file = File.createTempFile("few-tasks", ".csv");
             TaskManager taskManager1 = new FileBackedTaskManager(file);
             Task task = new Task("Task", "Description", TaskStatuses.DONE, Duration.ofMinutes(10),
                     LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
@@ -94,9 +101,9 @@ public class FileBackedTaskManagerTest {
 
             TaskManager taskManager2 = FileBackedTaskManager.loadFromFile(file);
 
-            assertEquals(taskManager1.getTasks(), taskManager2.getTasks());
-            assertEquals(taskManager1.getEpics(), taskManager2.getEpics());
-            assertEquals(taskManager1.getSubtasks(), taskManager2.getSubtasks());
+            assertEquals(taskManager1.getTasks(), taskManager2.getTasks(), "Не загрузил задачи.");
+            assertEquals(taskManager1.getEpics(), taskManager2.getEpics(), "Не загрузил эпики.");
+            assertEquals(taskManager1.getSubtasks(), taskManager2.getSubtasks(), "Не загрузил подзадачи.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }
@@ -105,20 +112,19 @@ public class FileBackedTaskManagerTest {
     @Test
     void shouldRenewTask() {
         try {
-            File.createTempFile("temp", "csv");
-            File file = new File("temp.csv");
-            TaskManager taskManager = new FileBackedTaskManager(file);
+            File file = File.createTempFile("temp", ".csv");
+            TaskManager taskManager1 = new FileBackedTaskManager(file);
             Task oldTask = new Task("OldTask", "OldDescription",
                     TaskStatuses.NEW, Duration.ofMinutes(10),
                     LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
-            taskManager.putTask(oldTask);
+            taskManager1.putTask(oldTask);
             Task newTask = new Task(oldTask, "NewTask", "NewDescription",
                     TaskStatuses.DONE, Duration.ofMinutes(15),
                     LocalDateTime.of(2016, Month.FEBRUARY, 16, 14, 45, 0));
 
-            taskManager.renewTask(newTask);
+            taskManager1.renewTask(newTask);
 
-            assertEquals(newTask, taskManager.getTaskById(oldTask.getId()));
+            assertEquals(newTask, taskManager1.getTaskById(oldTask.getId()), "Не обновил задачу.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }
@@ -127,15 +133,43 @@ public class FileBackedTaskManagerTest {
     @Test
     void shouldRemoveEpicById() {
         try {
-            File.createTempFile("temp", "csv");
-            File file = new File("temp.csv");
-            TaskManager taskManager = new FileBackedTaskManager(file);
+            File file = File.createTempFile("temp", ".csv");
+            TaskManager taskManager1 = new FileBackedTaskManager(file);
             Epic epic = new Epic("Epic", "Description");
-            taskManager.putEpic(epic);
+            taskManager1.putEpic(epic);
 
-            taskManager.removeEpicById(epic.getId());
+            taskManager1.removeEpicById(epic.getId());
 
-            assertNull(taskManager.getEpicById(epic.getId()));
+            assertNull(taskManager1.getEpicById(epic.getId()), "Не удалил эпик по id.");
+        } catch (IOException e) {
+            throw new ManagerSaveException("Произошла неизвестная ошибка");
+        }
+    }
+
+    @Test
+    void shouldThrowWhenFileIsNotWritable() {
+        try {
+            File file = File.createTempFile("not-writable", ".csv");
+            file.setReadOnly();
+
+            assertThrows(ManagerSaveException.class, () -> {
+                TaskManager taskManager1 = new FileBackedTaskManager(file);
+                Task task = new Task("Task", "Desc", TaskStatuses.IN_PROGRESS, Duration.ofMinutes(10),
+                        LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0, 0));
+                taskManager1.putTask(task);
+            }, "Ожидалось исключение ManagerSaveException при попытке сохранить в read-only файл");
+        } catch (IOException e) {
+            throw new ManagerSaveException("Произошла неизвестная ошибка");
+        }
+    }
+
+    @Test
+    void shouldNotThrowWhenFileIsValid() {
+        try {
+            File file = File.createTempFile("no-throw", ".csv");
+
+            assertDoesNotThrow(() -> new FileBackedTaskManager(file),
+                "Не должно быть исключения при корректном файле.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }

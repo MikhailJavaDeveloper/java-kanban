@@ -13,9 +13,9 @@ public interface TaskManager {
 
     Task getTaskById(int id);
 
-    Task putTask(Task task);
+    void putTask(Task task);
 
-    Task renewTask(Task newTask);
+    void renewTask(Task newTask);
 
     Task removeTaskById(int id);
 
@@ -26,9 +26,9 @@ public interface TaskManager {
 
     Subtask getSubtaskById(int id);
 
-    Subtask putSubtask(Subtask subtask);
+    void putSubtask(Subtask subtask);
 
-    Subtask renewSubtask(Subtask newSubtask);
+    void renewSubtask(Subtask newSubtask);
 
     Subtask removeSubtaskById(int id);
 
@@ -39,9 +39,9 @@ public interface TaskManager {
 
     Epic getEpicById(int id);
 
-    Epic putEpic(Epic epic);
+    void putEpic(Epic epic);
 
-    Epic renewEpic(Epic newEpic);
+    void renewEpic(Epic newEpic);
 
     Epic removeEpicById(int id);
 
