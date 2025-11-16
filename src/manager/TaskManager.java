@@ -4,49 +4,52 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public interface TaskManager {
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
     boolean clearTasks();
 
-    Task getTaskById(int id);
+    Optional<Task> getTaskById(int id);
 
-    Task putTask(Task task);
+    void putTask(Task task);
 
-    Task renewTask(Task newTask);
+    void renewTask(Task newTask);
 
     Task removeTaskById(int id);
 
 
-    ArrayList<Subtask> getSubtasks();
+    List<Subtask> getSubtasks();
 
     boolean clearSubtasks();
 
-    Subtask getSubtaskById(int id);
+    Optional<Subtask> getSubtaskById(int id);
 
-    Subtask putSubtask(Subtask subtask);
+    void putSubtask(Subtask subtask);
 
-    Subtask renewSubtask(Subtask newSubtask);
+    void renewSubtask(Subtask newSubtask);
 
     Subtask removeSubtaskById(int id);
 
 
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
     boolean clearEpics();
 
     Epic getEpicById(int id);
 
-    Epic putEpic(Epic epic);
+    void putEpic(Epic epic);
 
-    Epic renewEpic(Epic newEpic);
+    void renewEpic(Epic newEpic);
 
     Epic removeEpicById(int id);
 
 
-    ArrayList<Subtask> getEpicSubtasks(Epic epic);
+    List<Subtask> getEpicSubtasks(Epic epic);
 
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
 }

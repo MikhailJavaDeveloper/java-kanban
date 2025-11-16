@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -8,15 +10,20 @@ public class Task {
     private TaskStatuses status;
     private int id;
     protected TaskTypes type = TaskTypes.TASK;
+    private Duration duration;
+    private LocalDateTime startTime;
 
-    public Task(String name, String description, TaskStatuses status) {
+    public Task(String name, String description, TaskStatuses status, Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
-    public Task(Task oldTask, String name, String description, TaskStatuses status) {
-        this(name, description, status);
+    public Task(Task oldTask, String name, String description, TaskStatuses status, Duration duration,
+            LocalDateTime startTime) {
+        this(name, description, status, duration, startTime);
         this.id = oldTask.id;
     }
 
@@ -56,6 +63,30 @@ public class Task {
         return type;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long minutes) {
+        this.duration = Duration.ofMinutes(minutes);
+    }
+
+    public long getDurationInMinutes() {
+        return duration.toMinutes();
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
@@ -76,6 +107,9 @@ public class Task {
                 ", description.length=" + description.length() +
                 ", id=" + id +
                 ", status=" + status +
+                ", duration=" + getDurationInMinutes() +
+                ", startTime=" + getStartTime() +
+                ", endTime=" + getEndTime() +
                 '}';
     }
 }

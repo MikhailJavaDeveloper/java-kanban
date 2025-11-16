@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -74,17 +77,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task putTask(Task task) {
-        Task putTask = super.putTask(task);
+    public void putTask(Task task) {
+        super.putTask(task);
         save();
-        return putTask;
     }
 
     @Override
-    public Task renewTask(Task newTask) {
-        Task renewed = super.renewTask(newTask);
+    public void renewTask(Task newTask) {
+        super.renewTask(newTask);
         save();
-        return renewed;
     }
 
     @Override
@@ -102,17 +103,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Subtask putSubtask(Subtask subtask) {
-        Subtask putSubtask = super.putSubtask(subtask);
+    public void putSubtask(Subtask subtask) {
+        super.putSubtask(subtask);
         save();
-        return putSubtask;
     }
 
     @Override
-    public Subtask renewSubtask(Subtask newSubtask) {
-        Subtask renewedSubtask = super.renewSubtask(newSubtask);
+    public void renewSubtask(Subtask newSubtask) {
+        super.renewSubtask(newSubtask);
         save();
-        return renewedSubtask;
     }
 
     @Override
@@ -130,17 +129,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Epic putEpic(Epic epic) {
-        Epic putEpic = super.putEpic(epic);
+    public void putEpic(Epic epic) {
+        super.putEpic(epic);
         save();
-        return putEpic;
     }
 
     @Override
-    public Epic renewEpic(Epic newEpic) {
-        Epic renewedEpic = super.renewEpic(newEpic);
+    public void renewEpic(Epic newEpic) {
+        super.renewEpic(newEpic);
         save();
-        return renewedEpic;
     }
 
     @Override
@@ -176,12 +173,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public static void main(String[] args) {
-        Task task1 = new Task("Task1", "Description", TaskStatuses.NEW);
-        Task task2 = new Task("Task2", "Description", TaskStatuses.IN_PROGRESS);
+        Task task1 = new Task("Task1", "Description", TaskStatuses.NEW, Duration.ofMinutes(10),
+                LocalDateTime.of(2016, Month.FEBRUARY, 15, 12, 30, 0));
+        Task task2 = new Task("Task2", "Description", TaskStatuses.IN_PROGRESS, Duration.ofMinutes(15),
+                LocalDateTime.of(2016, Month.FEBRUARY, 16, 14, 0, 0));
         Epic epic1 = new Epic("Epic1", "Description");
         Epic epic2 = new Epic("Epic2", "Description");
-        Subtask subtask1 = new Subtask("Subtask1", "Description", TaskStatuses.DONE, epic1);
-        Subtask subtask2 = new Subtask("Subtask2", "Description", TaskStatuses.IN_PROGRESS, epic2);
+        Subtask subtask1 = new Subtask("Subtask1", "Description",
+                TaskStatuses.DONE, epic1, Duration.ofMinutes(15),
+                LocalDateTime.of(2016, Month.FEBRUARY, 17, 1, 45, 0));
+        Subtask subtask2 = new Subtask("Subtask2", "Description",
+                TaskStatuses.IN_PROGRESS, epic2, Duration.ofMinutes(10),
+                LocalDateTime.of(2016, Month.FEBRUARY, 18, 22, 30, 0));
 
         TaskManager taskManager = Managers.getDefault();
         taskManager.putTask(task1);

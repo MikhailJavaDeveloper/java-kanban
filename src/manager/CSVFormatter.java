@@ -3,6 +3,8 @@ package manager;
 import tasks.*;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class CSVFormatter {
     public static String getHeader() {
@@ -14,11 +16,14 @@ public class CSVFormatter {
             case TaskTypes.TASK:
                 switch (task.getStatus()) {
                     case TaskStatuses.NEW:
-                        return task.getId() + ",TASK," + task.getName() + ",NEW," + task.getDescription() + ",";
+                        return task.getId() + ",TASK," + task.getName() + ",NEW," + task.getDescription() +
+                            "," + task.getDurationInMinutes() + "," + task.getStartTime() + ",";
                     case TaskStatuses.IN_PROGRESS:
-                        return task.getId() + ",TASK," + task.getName() + ",IN_PROGRESS," + task.getDescription() + ",";
+                        return task.getId() + ",TASK," + task.getName() + ",IN_PROGRESS," + task.getDescription() +
+                            "," + task.getDurationInMinutes() + "," + task.getStartTime() + ",";
                     case TaskStatuses.DONE:
-                        return task.getId() + ",TASK," + task.getName() + ",DONE," + task.getDescription() + ",";
+                        return task.getId() + ",TASK," + task.getName() + ",DONE," + task.getDescription() +
+                            "," + task.getDurationInMinutes() + "," + task.getStartTime() + ",";
                     default:
                         throw new IOException();
                 }
@@ -37,14 +42,17 @@ public class CSVFormatter {
                 Subtask subtask = (Subtask) task;
                 switch (task.getStatus()) {
                     case TaskStatuses.NEW:
-                        return task.getId() + ",SUBTASK," + task.getName() + ",NEW," + task.getDescription() + "," +
+                        return task.getId() + ",SUBTASK," + task.getName() + ",NEW," + task.getDescription() +
+                            "," + task.getDurationInMinutes() + "," + task.getStartTime() + "," +
                             subtask.getEpic().getId();
                     case TaskStatuses.IN_PROGRESS:
                         return task.getId() + ",SUBTASK," + task.getName() + ",IN_PROGRESS," + task.getDescription() +
+                            "," + task.getDurationInMinutes() + "," + task.getStartTime() +
                             "," + subtask.getEpic().getId();
                     case TaskStatuses.DONE:
-                        return task.getId() + ",SUBTASK," + task.getName() + ",DONE," + task.getDescription() + "," +
-                                subtask.getEpic().getId();
+                        return task.getId() + ",SUBTASK," + task.getName() + ",DONE," + task.getDescription() +
+                            "," + task.getDurationInMinutes() + "," + task.getStartTime() + "," +
+                            subtask.getEpic().getId();
                     default:
                         throw new IOException();
                 }
@@ -60,20 +68,25 @@ public class CSVFormatter {
         String name = fields[2];
         String status = fields[3];
         String description = fields[4];
-        String epic = fields.length > 5 ? fields[5] : null;
+        long minutes = fields.length > 5 ? Long.parseLong(fields[5]) : 0;
+        String startTime = fields.length > 6 ? fields[6] : null;
+        String epic = fields.length > 7 ? fields[7] : null;
 
         Task task = null;
         switch (type) {
             case "TASK":
                 switch (status) {
                     case "NEW":
-                        task = new Task(name, description, TaskStatuses.NEW);
+                        task = new Task(name, description, TaskStatuses.NEW,
+                            Duration.ofMinutes(minutes), LocalDateTime.parse(startTime));
                         break;
                     case "IN_PROGRESS":
-                        task = new Task(name, description, TaskStatuses.IN_PROGRESS);
+                        task = new Task(name, description, TaskStatuses.IN_PROGRESS,
+                                Duration.ofMinutes(minutes), LocalDateTime.parse(startTime));
                         break;
                     case "DONE":
-                        task = new Task(name, description, TaskStatuses.DONE);
+                        task = new Task(name, description, TaskStatuses.DONE,
+                                Duration.ofMinutes(minutes), LocalDateTime.parse(startTime));
                         break;
                     default:
                         throw new IOException();
@@ -100,13 +113,16 @@ public class CSVFormatter {
                 int epicId = Integer.parseInt(epic);
                 switch (status) {
                     case "NEW":
-                        task = new Subtask(name, description, TaskStatuses.NEW, epicId);
+                        task = new Subtask(name, description, TaskStatuses.NEW, epicId,
+                                Duration.ofMinutes(minutes), LocalDateTime.parse(startTime));
                         break;
                     case "IN_PROGRESS":
-                        task = new Subtask(name, description, TaskStatuses.IN_PROGRESS, epicId);
+                        task = new Subtask(name, description, TaskStatuses.IN_PROGRESS, epicId,
+                                Duration.ofMinutes(minutes), LocalDateTime.parse(startTime));
                         break;
                     case "DONE":
-                        task = new Subtask(name, description, TaskStatuses.DONE, epicId);
+                        task = new Subtask(name, description, TaskStatuses.DONE, epicId,
+                                Duration.ofMinutes(minutes), LocalDateTime.parse(startTime));
                         break;
                     default:
                         throw new IOException();
