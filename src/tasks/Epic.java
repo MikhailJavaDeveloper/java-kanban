@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class Epic extends Task {
-    private ArrayList<Subtask> subtasks;
-    private LocalDateTime endTime;
+    private transient ArrayList<Subtask> subtasks;
+    private transient LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description, TaskStatuses.NEW, Duration.ofMinutes(0),
@@ -48,10 +48,11 @@ public class Epic extends Task {
 
     @Override
     public LocalDateTime getEndTime() {
+        if (subtasks.isEmpty()) return getStartTime();
         endTime = getSubtasks().stream()
                 .map(Subtask::getEndTime)
                 .max(LocalDateTime::compareTo)
-                .get();
+                .orElse(getStartTime());
         return endTime;
     }
 

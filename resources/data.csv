@@ -1,7 +1,2 @@
 id,type,name,status,description,epic
-1,TASK,Task1,NEW,Description,10,2016-02-15T12:30,
-2,TASK,Task2,IN_PROGRESS,Description,15,2016-02-16T14:00,
-3,EPIC,Epic1,DONE,Description,
-4,EPIC,Epic2,IN_PROGRESS,Description,
-5,SUBTASK,Subtask1,DONE,Description,15,2016-02-17T01:45,3
-6,SUBTASK,Subtask2,IN_PROGRESS,Description,10,2016-02-18T22:30,4
+1,SUBTASK,А,NEW,Б,10,2016-02-15T12:30,0
