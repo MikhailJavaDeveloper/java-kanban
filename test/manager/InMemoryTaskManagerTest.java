@@ -1,5 +1,7 @@
 package manager;
 
+import exceptions.ManagerSaveException;
+import exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
@@ -155,10 +157,9 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         taskManager.putTask(washDishes);
 
         taskManager.removeTaskById(washDishes.getId());
-        Task task = taskManager.getTaskById(washDishes.getId()).orElse(null);
 
-        assertNotEquals(washDishes, task, "Задачи совпадают.");
-        assertNull(task, "Задача найдена.");
+        assertThrows(NotFoundException.class, () -> taskManager.getTaskById(washDishes.getId()),
+                "Задача не удалена.");
     }
 
     @Test

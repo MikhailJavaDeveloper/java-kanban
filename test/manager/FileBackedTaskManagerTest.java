@@ -1,6 +1,7 @@
 package manager;
 
 import exceptions.ManagerSaveException;
+import exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
@@ -140,7 +141,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
             taskManager1.removeEpicById(epic.getId());
 
-            assertNull(taskManager1.getEpicById(epic.getId()), "Не удалил эпик по id.");
+            assertThrows(NotFoundException.class, () -> taskManager1.getEpicById(epic.getId()),
+                    "Не удалил эпик по id.");
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла неизвестная ошибка");
         }

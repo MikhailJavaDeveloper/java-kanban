@@ -1,5 +1,7 @@
 package manager;
 
+import exceptions.HasOverlapsException;
+import exceptions.ManagerSaveException;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
 import tasks.TaskStatuses;
@@ -20,13 +22,10 @@ public abstract class TaskManagerTest <T extends TaskManager> {
                 LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0, 0));
         Task task2 = new Task("Task2", "Desc", TaskStatuses.IN_PROGRESS, Duration.ofMinutes(10),
                 LocalDateTime.of(1970, Month.JANUARY, 1, 0, 5, 0));
-        List<Task> tasks = List.of(task1);
-
         taskManager.putTask(task1);
-        taskManager.putTask(task2);
-        List<Task> result = taskManager.getTasks();
 
-        assertEquals(tasks, result, "Ошибка в определении перекрытия задач.");
+        assertThrows(HasOverlapsException.class, () -> taskManager.putTask(task2),
+                "Ошибка в определении перекрытия задач.");
     }
 
     @Test

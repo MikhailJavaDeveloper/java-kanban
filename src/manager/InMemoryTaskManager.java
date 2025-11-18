@@ -1,5 +1,7 @@
 package manager;
 
+import exceptions.HasOverlapsException;
+import exceptions.NotFoundException;
 import tasks.*;
 
 import java.time.LocalDateTime;
@@ -39,27 +41,36 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Optional<Task> getTaskById(int id) {
+    public Optional<Task> getTaskById(int id) throws NotFoundException {
         historyManager.add(tasks.get(id));
-        return Optional.ofNullable(tasks.get(id));
-    }
-
-    @Override
-    public void putTask(Task task) {
-        if (!hasOverlap(task)) {
-            task.setId(generateTaskId());
-            tasks.put(task.getId(), task);
-            addTaskInPT(task);
+        Optional<Task> taskOpt = Optional.ofNullable(tasks.get(id));
+        if (taskOpt.isPresent()) {
+            return taskOpt;
+        } else {
+            throw new NotFoundException("Задача не найдена.");
         }
     }
 
     @Override
-    public void renewTask(Task newTask) {
+    public void putTask(Task task) throws HasOverlapsException {
+        if (!hasOverlap(task)) {
+            task.setId(generateTaskId());
+            tasks.put(task.getId(), task);
+            addTaskInPT(task);
+        } else {
+            throw new HasOverlapsException("Перекрывает другие задачи.");
+        }
+    }
+
+    @Override
+    public void renewTask(Task newTask) throws HasOverlapsException {
         tasks.remove(newTask.getId());
         prioritizedTasks.remove(newTask);
         if (!hasOverlap(newTask)) {
             tasks.put(newTask.getId(), newTask);
             addTaskInPT(newTask);
+        } else {
+            throw new HasOverlapsException("Перекрывает другие задачи.");
         }
     }
 
@@ -89,27 +100,36 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Optional<Subtask> getSubtaskById(int id) {
+    public Optional<Subtask> getSubtaskById(int id) throws NotFoundException {
         historyManager.add(subtasks.get(id));
-        return Optional.ofNullable(subtasks.get(id));
-    }
-
-    @Override
-    public void putSubtask(Subtask subtask) {
-        if (!hasOverlap(subtask)) {
-            subtask.setId(generateTaskId());
-            subtasks.put(subtask.getId(), subtask);
-            addTaskInPT(subtask);
+        Optional<Subtask> subtaskOpt = Optional.ofNullable(subtasks.get(id));
+        if (subtaskOpt.isPresent()) {
+            return subtaskOpt;
+        } else {
+            throw new NotFoundException("Подзадача не найдена.");
         }
     }
 
     @Override
-    public void renewSubtask(Subtask newSubtask) {
+    public void putSubtask(Subtask subtask) throws HasOverlapsException {
+        if (!hasOverlap(subtask)) {
+            subtask.setId(generateTaskId());
+            subtasks.put(subtask.getId(), subtask);
+            addTaskInPT(subtask);
+        } else {
+            throw new HasOverlapsException("Перекрывает другие задачи.");
+        }
+    }
+
+    @Override
+    public void renewSubtask(Subtask newSubtask) throws HasOverlapsException {
         subtasks.remove(newSubtask.getId());
         prioritizedTasks.remove(newSubtask);
         if (!hasOverlap(newSubtask)) {
             subtasks.put(newSubtask.getId(), newSubtask);
             addTaskInPT(newSubtask);
+        } else {
+            throw new HasOverlapsException("Перекрывает другие задачи.");
         }
     }
 
@@ -143,24 +163,36 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpicById(int id) {
+    public Epic getEpicById(int id) throws NotFoundException {
         historyManager.add(epics.get(id));
-        return epics.get(id);
-    }
-
-    @Override
-    public void putEpic(Epic epic) {
-        if (!hasOverlap(epic)) {
-            epic.setId(generateTaskId());
-            epics.put(epic.getId(), epic);
+        Epic epic = epics.get(id);
+        if (epic != null) {
+            return epic;
+        } else {
+            throw new NotFoundException("Эпик не найден.");
         }
     }
 
     @Override
-    public void renewEpic(Epic newEpic) {
+    public void putEpic(Epic epic) throws HasOverlapsException {
+        if (!hasOverlap(epic)) {
+            epic.setId(generateTaskId());
+            epics.put(epic.getId(), epic);
+            for (Subtask subtask : epic.getSubtasks()) {
+                subtask.setEpicId(epic.getId());
+            }
+        } else {
+            throw new HasOverlapsException("Перекрывает другие задачи.");
+        }
+    }
+
+    @Override
+    public void renewEpic(Epic newEpic) throws HasOverlapsException {
         epics.remove(newEpic.getId());
         if (!hasOverlap(newEpic)) {
             epics.put(newEpic.getId(), newEpic);
+        } else {
+            throw new HasOverlapsException("Перекрывает другие задачи.");
         }
     }
 
